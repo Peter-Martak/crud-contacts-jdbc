@@ -7,10 +7,10 @@ public class Main {
         String select = "SELECT * FROM contact";
         String connectionURL = "jdbc:mysql://localhost:3306/contacts";
         
-        try {
-            Connection conn = DriverManager.getConnection(connectionURL, "root", "password");
+        try(Connection conn = DriverManager.getConnection(connectionURL, "root", "password");
             PreparedStatement ps = conn.prepareStatement(select);
-            ResultSet rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery()) {
+
             while (rs.next()){
                 long id = rs.getLong("id");
                 String name = rs.getString("name");
