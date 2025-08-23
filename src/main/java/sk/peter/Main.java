@@ -5,9 +5,8 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) {
         String select = "SELECT * FROM contact";
-        String connectionURL = "jdbc:mysql://localhost:3306/contacts";
         
-        try(Connection conn = DriverManager.getConnection(connectionURL, "root", "password");
+        try(Connection conn = HikariCPDataSource.getConnection();
             PreparedStatement ps = conn.prepareStatement(select);
             ResultSet rs = ps.executeQuery()) {
 
