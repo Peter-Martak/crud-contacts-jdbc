@@ -1,4 +1,4 @@
-package sk.peter;
+package sk.peter.db;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
