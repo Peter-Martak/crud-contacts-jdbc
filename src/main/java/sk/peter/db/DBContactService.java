@@ -2,10 +2,7 @@ package sk.peter.db;
 
 import org.slf4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,8 +47,11 @@ public class DBContactService {
 
             return ps.executeUpdate();
 
-        }catch (SQLException e){
-            logger.error("Error while creating new contact");
+        } catch (SQLIntegrityConstraintViolationException e){
+            System.out.println("Contact with this email or phone already exits");
+            return 0;
+        } catch (SQLException e){
+            logger.error("Error while creating new contact", e);
             return 0;
         }
     }
