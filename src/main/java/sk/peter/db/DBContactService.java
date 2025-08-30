@@ -13,6 +13,8 @@ public class DBContactService {
 
     private static final String CREATE = "INSERT INTO contact(name, email, phone) VALUES ( ?, ?, ?)";
 
+    private static final String DELETE = "DELETE FROM contact WHERE id = ?";
+
     private static final Logger logger = getLogger(DBContactService.class);
 
     public List<Contact> readAll() {
@@ -52,6 +54,20 @@ public class DBContactService {
             return 0;
         } catch (SQLException e){
             logger.error("Error while creating new contact", e);
+            return 0;
+        }
+    }
+
+    public int delete(int id){
+        try(
+                Connection conn = HikariCPDataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(DELETE);
+                ) {
+            ps.setInt(1, id);
+            // returns number of affected rows
+            return ps.executeUpdate();
+        }catch (SQLException e){
+            System.out.println();
             return 0;
         }
     }

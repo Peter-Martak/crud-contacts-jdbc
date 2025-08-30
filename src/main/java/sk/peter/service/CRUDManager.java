@@ -30,7 +30,7 @@ public class CRUDManager {
                 case 0 -> printAllContact();
                 case 1 -> System.out.println("Not implemented");
                 case 2 -> createContact();
-                case 3 -> System.out.println("Not implemented");
+                case 3 -> deleteContact();
                 case 4 -> System.out.println("Not implemented");
                 case 5 -> {
                     System.out.println("Good bye");
@@ -40,6 +40,32 @@ public class CRUDManager {
             }
         }
     }
+
+    private void deleteContact() {
+        List<Contact> contacts = contactService.readAll();
+
+        int choice;
+        while (true) {
+            System.out.println("0. Cancel");
+            for (int i = 0; i < contacts.size(); i++) {
+                System.out.println(i + 1 + ". " + contacts.get(i));
+            }
+            System.out.println("Enter number of contact you want to delete");
+            choice = InputUtils.readInt();
+
+                if (choice == 0) {
+                    return;
+                } else if (choice < 1 || choice > contacts.size()) {
+                    System.out.println("Invalid choice");
+                    continue;
+                }
+
+                if ((contactService.delete(contacts.get(choice - 1).getId()) > 0)) {
+                    System.out.println("Contact deleted successfully");
+                    return;
+                }
+            }
+        }
 
     private void createContact() {
         System.out.println("Enter name");
