@@ -1,13 +1,9 @@
 package sk.peter;
 
-import sk.peter.db.DBContactService;
-import sk.peter.db.HikariCPDataSource;
-
-import java.sql.*;
+import sk.peter.service.CRUDManager;
 
 public class Main {
     public static void main(String[] args) {
-        DBContactService service = new DBContactService();
-        service.readAll().forEach(System.out::println);
+        new CRUDManager().printOptions();
     }
 }
