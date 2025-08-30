@@ -15,6 +15,8 @@ public class DBContactService {
 
     private static final String DELETE = "DELETE FROM contact WHERE id = ?";
 
+    private static final String EDIT = "UPDATE contact SET name = ?, email = ?, phone = ? WHERE id = ?";
+
     private static final Logger logger = getLogger(DBContactService.class);
 
     public List<Contact> readAll() {
@@ -67,7 +69,29 @@ public class DBContactService {
             // returns number of affected rows
             return ps.executeUpdate();
         }catch (SQLException e){
-            System.out.println();
+            logger.error("Error while deleting contact", e);
+            return 0;
+        }
+    }
+
+    public int edit (int id, String name, String email, String phone){
+        try(
+                Connection conn = HikariCPDataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(EDIT);
+                ){
+                ps.setInt(4, id);
+                ps.setString(1, name);
+                ps.setString(2, email);
+                ps.setString(3, phone);
+
+                // return number of affected rows
+                return ps.executeUpdate();
+        }catch (SQLIntegrityConstraintViolationException e){
+            logger.error("Contact with this email or phone already exists");
+            return 0;
+        }
+        catch (SQLException e){
+            logger.error("Error while editing contact", e);
             return 0;
         }
     }

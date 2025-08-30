@@ -28,7 +28,7 @@ public class CRUDManager {
             final int choice = InputUtils.readInt();
             switch (choice){
                 case 0 -> printAllContact();
-                case 1 -> System.out.println("Not implemented");
+                case 1 -> editContact();
                 case 2 -> createContact();
                 case 3 -> deleteContact();
                 case 4 -> System.out.println("Not implemented");
@@ -38,6 +38,74 @@ public class CRUDManager {
                 }
                 default -> System.out.println("Invalid choice");
             }
+        }
+    }
+
+    private void editContact() {
+        List<Contact> contacts = contactService.readAll();
+        while (true){
+            System.out.println("0. Cancel");
+            for (int i = 0; i < contacts.size(); i++ ){
+                System.out.println(i + 1 + ". " + contacts.get(i));
+            }
+
+            System.out.println("Enter contact you want to edit: ");
+             final int choice = InputUtils.readInt();
+
+            if (choice == 0){
+                return;
+            } else if (choice < 1 || choice > contacts.size()){
+                System.out.println("Invalid choice");
+                continue;
+            }
+            System.out.println(contacts.get(choice - 1).toString());
+            System.out.println("Which value do you want to update?");
+            System.out.println("0. Cancel");
+            System.out.println("1. Name");
+            System.out.println("2. Email");
+            System.out.println("3. Phone");
+
+            final int value = InputUtils.readInt();
+
+            if (value == 0){
+                return;
+            }
+
+            final int id = contacts.get(choice - 1).getId();
+            String name = contacts.get(choice - 1).getName();
+            String email = contacts.get(choice - 1).getEmail();
+            String phone = contacts.get(choice - 1).getPhone();
+
+            switch (value){
+                case 1 -> {
+                    System.out.println("Enter new name");
+                     name = InputUtils.readString();
+                    if( contactService.edit(id, name, email, phone) > 0){
+                        System.out.println("Contact edited successfully");
+                    }
+                    return;
+                }
+                case 2 -> {
+                    System.out.println("Enter new email");
+                    email = InputUtils.readString();
+                    contactService.edit(id, name, email, phone);
+                    if( contactService.edit(id, name, email, phone) > 0){
+                        System.out.println("Contact edited successfully");
+                    }
+                    return;
+                }
+                case 3 ->{
+                    System.out.println("Enter new phone");
+                    phone = InputUtils.readString();
+                    contactService.edit(id, name, email, phone);
+                    if( contactService.edit(id, name, email, phone) > 0){
+                        System.out.println("Contact edited successfully");
+                    }
+                    return;
+                }
+                default -> System.out.println("Invalid input");
+            }
+
         }
     }
 
