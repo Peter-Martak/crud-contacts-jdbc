@@ -16,6 +16,7 @@ public class DBContactService {
     private static final String DELETE = "DELETE FROM contact WHERE id = ?";
 
     private static final String EDIT = "UPDATE contact SET name = ?, email = ?, phone = ? WHERE id = ?";
+    private static final String SEARCH = "SELECT * FROM contact WHERE email LIKE  ? ";
 
     private static final Logger logger = getLogger(DBContactService.class);
 
@@ -93,6 +94,25 @@ public class DBContactService {
         catch (SQLException e){
             logger.error("Error while editing contact", e);
             return 0;
+        }
+    }
+
+    public void search(String mail){
+        try(
+                Connection conn = HikariCPDataSource.getConnection();
+                PreparedStatement ps = conn.prepareStatement(SEARCH);
+                ) {
+            ps.setString(1,"%" + mail + "%");
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                System.out.println("id: " +id + " name: " + name +" email: "+ email + " phone: " + phone );
+            }
+        }catch (SQLException e){
+            logger.error("Contact not found", e);
         }
     }
 }

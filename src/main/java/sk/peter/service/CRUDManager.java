@@ -4,6 +4,7 @@ import sk.peter.db.Contact;
 import sk.peter.db.DBContactService;
 import sk.peter.utility.InputUtils;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class CRUDManager {
             System.out.println("1. Edit contact");
             System.out.println("2. Add contact");
             System.out.println("3. Delete contact");
-            System.out.println("4. Search contact");
+            System.out.println("4. Search contacts by email");
             System.out.println("5. Exit");
 
             final int choice = InputUtils.readInt();
@@ -31,7 +32,7 @@ public class CRUDManager {
                 case 1 -> editContact();
                 case 2 -> createContact();
                 case 3 -> deleteContact();
-                case 4 -> System.out.println("Not implemented");
+                case 4 -> searchContact();
                 case 5 -> {
                     System.out.println("Good bye");
                     return;
@@ -41,13 +42,18 @@ public class CRUDManager {
         }
     }
 
+    private void searchContact() {
+        System.out.println("Enter email");
+        String mail = InputUtils.readString();
+        contactService.search(mail);
+
+    }
+
     private void editContact() {
         List<Contact> contacts = contactService.readAll();
         while (true){
             System.out.println("0. Cancel");
-            for (int i = 0; i < contacts.size(); i++ ){
-                System.out.println(i + 1 + ". " + contacts.get(i));
-            }
+            printListContact(contacts);
 
             System.out.println("Enter contact you want to edit: ");
              final int choice = InputUtils.readInt();
@@ -115,9 +121,7 @@ public class CRUDManager {
         int choice;
         while (true) {
             System.out.println("0. Cancel");
-            for (int i = 0; i < contacts.size(); i++) {
-                System.out.println(i + 1 + ". " + contacts.get(i));
-            }
+            printListContact(contacts);
             System.out.println("Enter number of contact you want to delete");
             choice = InputUtils.readInt();
 
@@ -145,6 +149,12 @@ public class CRUDManager {
 
         if(contactService.create(name,email,phone) > 0){
             System.out.println("Contact created successfully");
+        }
+    }
+
+    private void printListContact(List<Contact> contacts){
+        for (int i = 0; i < contacts.size(); i++ ){
+            System.out.println(i + 1 + ". " + contacts.get(i));
         }
     }
 
